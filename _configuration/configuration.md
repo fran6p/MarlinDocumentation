@@ -14,7 +14,7 @@ Marlin is a huge C++ program composed of many files, but here we'll only be talk
 - `Configuration.h` contains the core settings for the hardware, language and controller selection, and settings for the most common features and components.
 - `Configuration_adv.h` serves up more detailed customization options, add-ons, experimental features, and other esoterica.
 
-These two files contain all of Marlin's build-time configuration options. Simply edit or replace these files before building and uploading Marlin to the board. A variety of pre-built configurations are included in the `config/examples` folder to get you started.
+These two files contain all of Marlin's build-time configuration options. Simply edit or replace these files before building and uploading Marlin to the board. A variety of pre-built configurations are included in the [Configurations repository](https://github.com/MarlinFirmware/Configurations) to get you started.
 
 To use configurations from an earlier version of Marlin, try dropping them into the newer Marlin and building. As part of the build process, the `SanityCheck.h` will print helpful error messages explaining what needs to be changed.
 
@@ -97,7 +97,7 @@ Marlin now checks for a configuration version and won't compile without this set
 #define CUSTOM_STATUS_SCREEN_IMAGE
 
 ```
-- `STRING_CONFIG_H_AUTHOR` is shown in the Marlin startup message, and is meant to identify the author (and optional variant) of the firmware. Use this setting as a way to uniquely identify all your custom configurations. The startup message is printed when connecting to host software, when the board reboots and M115.
+- `STRING_CONFIG_H_AUTHOR` is shown in the Marlin startup message, and is meant to identify the author (and optional variant) of the firmware. Use this setting as a way to uniquely identify all your custom configurations. The startup message is printed whenever the board reboots.
 - `SHOW_BOOTSCREEN` enables the boot screen for LCD controllers.
 - `SHOW_CUSTOM_BOOTSCREEN` shows the bitmap in Marlin/_Bootscreen.h on startup.
 - `CUSTOM_STATUS_SCREEN_IMAGE` shows the bitmap in Marlin/_Statusscreen.h on the status screen.
@@ -513,10 +513,11 @@ Disable `PIDTEMP` to run extruders in bang-bang mode. Bang-bang is a pure binary
 #if ENABLED(PIDTEMP)
   //#define PID_EDIT_MENU
   //#define PID_AUTOTUNE_MENU
+  //#define PID_PARAMS_PER_HOTEND
+
   //#define PID_DEBUG
   //#define PID_OPENLOOP 1
   //#define SLOW_PWM_HEATERS
-  //#define PID_PARAMS_PER_HOTEND
   #define PID_FUNCTIONAL_RANGE 10
   
 ```
@@ -524,20 +525,17 @@ Enable `PID_AUTOTUNE_MENU` to add an option on the LCD to run an Autotune cycle 
 
 #### PID Values <em class="fa fa-sticky-note-o" aria-hidden="true"></em> <em class="fa fa-desktop" aria-hidden="true"></em>
 ```cpp
-  // Ultimaker
-  #define  DEFAULT_Kp 22.2
-  #define  DEFAULT_Ki 1.08
-  #define  DEFAULT_Kd 114
-
-  // MakerGear
-  //#define  DEFAULT_Kp 7.0
-  //#define  DEFAULT_Ki 0.1
-  //#define  DEFAULT_Kd 12
-
-  // Mendel Parts V9 on 12V
-  //#define  DEFAULT_Kp 63.0
-  //#define  DEFAULT_Ki 2.25
-  //#define  DEFAULT_Kd 440
+  #if ENABLED(PID_PARAMS_PER_HOTEND)
+    // Specify between 1 and HOTENDS values per array.
+    // If fewer than EXTRUDER values are provided, the last element will be repeated.
+    #define DEFAULT_Kp_LIST {  22.20,  22.20 }
+    #define DEFAULT_Ki_LIST {   1.08,   1.08 }
+    #define DEFAULT_Kd_LIST { 114.00, 114.00 }
+  #else
+    #define DEFAULT_Kp  22.20
+    #define DEFAULT_Ki   1.08
+    #define DEFAULT_Kd 114.00
+  #endif
 ```
 Sample PID values are included for reference, but they won't apply to most setups. The PID values you get from [`M303`](/docs/gcode/M303.html) may be very different, but will be better for your specific machine.
 
