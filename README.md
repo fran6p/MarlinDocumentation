@@ -52,6 +52,10 @@ Try to be neutral, concise, and straightforward. Avoid use of personal pronouns,
 1. Create "Getting Started" guides to ease the Marlin learning curve for new users.
 1. Document all supported G-codes with notes specific to Marlin.
 
+### Work in progress
+
+You can use the `_tmp` folder for files in progress, and they will not be included in the site deployment.
+
 ## Local Jekyll Preview
 
 If you'd like to be able to preview your contributions before submitting them, you'll need to install Jekyll on your system. Instructions are given below. As this is a non-trivial process, we recommend reading one of the following tutorials for a quick start with Jekyll:
@@ -101,7 +105,8 @@ Under Jekyll we use YAML, Markdown, Liquid, and HTML to fill out the site conten
 Now that you have Ruby installed, you'll be able to use Jekyll to preview your changes exactly as they will appear on the final site. Just open a terminal/cmd window, use `chdir` or `cd` to change the working path to your local copy of the repository, and execute the following commands:
 
 ```
-bundle install --path vendor/bundle
+bundle config set path 'vendor/bundle'
+bundle install
 bundle exec jekyll serve --watch --incremental
 ```
 

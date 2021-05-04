@@ -14,7 +14,7 @@ Marlin is a huge C++ program composed of many files, but here we'll only be talk
 - `Configuration.h` contains the core settings for the hardware, language and controller selection, and settings for the most common features and components.
 - `Configuration_adv.h` serves up more detailed customization options, add-ons, experimental features, and other esoterica.
 
-These two files contain all of Marlin's build-time configuration options. Simply edit or replace these files before building and uploading Marlin to the board. A variety of pre-built configurations are included in the [Configurations repository](https://github.com/MarlinFirmware/Configurations) to get you started.
+These two files contain all of Marlin's build-time configuration options. Simply edit or replace these files before building and uploading Marlin to the board. A variety of pre-built configurations are included in the [Configurations repository](//github.com/MarlinFirmware/Configurations) to get you started.
 
 To use configurations from an earlier version of Marlin, try dropping them into the newer Marlin and building. As part of the build process, the `SanityCheck.h` will print helpful error messages explaining what needs to be changed.
 
@@ -41,7 +41,7 @@ If you've never configured and calibrated a 3D Printer before, here are some goo
 
 - [Calibration](//reprap.org/wiki/Calibration)
 - [Calibrating Steps-per-unit](//youtu.be/wAL9d7FgInk)
-- [Prusa's calculators](//calculator.josefprusa.cz)
+- [Prusa's calculators](//blog.prusaprinters.org/calculator_3416/)
 - [Triffid Hunter's Calibration Guide](//reprap.org/wiki/Triffid_Hunter%27s_Calibration_Guide)
 - [The Essential Calibration Set](//www.thingiverse.com/thing:5573)
 - [Calibration of your RepRap](//sites.google.com/site/repraplogphase/calibration-of-your-reprap)
@@ -113,7 +113,7 @@ The index of the on-board serial port that will be used for primary host communi
 
 {% alert info %}
 The first serial port (-1 or 0) will always be used by the Arduino bootloader regardless of this setting.
-{% endalert %} 
+{% endalert %}
 
 ```cpp
 #define SERIAL_PORT_2 -1
@@ -122,7 +122,7 @@ Enable this if your board has a secondary serial port.
 
 {% alert info %}
 Serial port -1 is the USB emulated serial port, if available.
-{% endalert %} 
+{% endalert %}
 
 
 ### Baud Rate
@@ -148,7 +148,7 @@ Enable the Bluetooth serial interface. For boards based on the AT90USB.
 ```
 The most important setting is Marlin is the motherboard. The firmware needs to know what board it will be running on so it can assign the right functions to all pins and take advantage of the full capabilities of the board. Setting this incorrectly will lead to unpredictable results.
 
-Using [`boards.h`](/docs/hardware/boards.html) as a reference, replace `BOARD_RAMPS_14_EFB` with your board's ID. The [`boards.h`](/docs/hardware/boards.html) file has the most up-to-date listing of supported boards, so check it first if you don't see yours listed there.
+Using `boards.h` as a reference, replace `BOARD_RAMPS_14_EFB` with your board's ID. The `boards.h` file has the most up-to-date listing of supported boards - check there first if you don't see yours listed [`here`](/docs/hardware/boards.html).
 
 {% alert info %}
 The Sanguino board requires adding "Sanguino" support to Arduino IDE. Open `Preferences` and locate the `Additional Boards Manager URLs` field. Copy and paste [this source URL](//raw.githubusercontent.com/Lauszus/Sanguino/master/package_lauszus_sanguino_index.json). Then use `Tools` > `Boards` > `Boards Manager` to install "Sanguino" from the list. An internet connection is required. (Thanks to "Dust's RepRap Blog" for the tip.)
@@ -217,7 +217,7 @@ Override the default DIO selector pins.
 ```cpp
 #define PRUSA_MMU2
 ```
-Enable support for the Prusa Multi-material unit 2. This requires a free serial port on your printer board. To use the MMU2 you also have to 
+Enable support for the Prusa Multi-material unit 2. This requires a free serial port on your printer board. To use the MMU2 you also have to
 
  - enable [NOZZLE_PARK_FEATURE](#nozzle-park)
  - set [EXTRUDERS](#extruders) = 5
@@ -519,7 +519,7 @@ Disable `PIDTEMP` to run extruders in bang-bang mode. Bang-bang is a pure binary
   //#define PID_OPENLOOP 1
   //#define SLOW_PWM_HEATERS
   #define PID_FUNCTIONAL_RANGE 10
-  
+
 ```
 Enable `PID_AUTOTUNE_MENU` to add an option on the LCD to run an Autotune cycle and automatically apply the result. Enable `PID_PARAMS_PER_HOTEND` if you have more than one extruder and they are different models.
 
@@ -698,7 +698,7 @@ By default all endstops have pullup resistors enabled. This is best for NC switc
   //#define ENDSTOPPULLDOWN_ZMIN_PROBE
 #endif
 ```
-By default all endstops have pulldown resistors disabled. 
+By default all endstops have pulldown resistors disabled.
 
 ### Endstop Inverting
 
@@ -996,7 +996,7 @@ These offsets specify the distance from the tip of the nozzle to the probe — o
 #define Y_PROBE_OFFSET_FROM_EXTRUDER 10  // Y offset: -front +behind [the nozzle]
 #define Z_PROBE_OFFSET_FROM_EXTRUDER 0   // Z offset: -below +above  [the nozzle]
 
-#define MIN_PROBE_EDGE 10
+#define PROBING_MARGIN 10
 ```
 Certain types of probe need to stay away from the edge
 
@@ -1148,7 +1148,7 @@ These settings reverse the motor direction for each axis. Be careful when first 
 
 ```
 This value raises Z to the specified height above the bed before homing X or Y. This is useful to prevent the head crashing into bed mountings such as screws, bulldog clips, etc. This also works with auto bed leveling enabled and will be triggered only when the Z axis height is less than the defined value, otherwise the Z axis will not move.
-	`NO_MOTION_BEFORE_HOMING` and `UNKNOWN_Z_NO_RAISE` 
+	`NO_MOTION_BEFORE_HOMING` and `UNKNOWN_Z_NO_RAISE`
 
 ### Homing Direction
 
@@ -1327,10 +1327,10 @@ When using any of the mesh-based leveling systems (1.1.7) you can activate `G26_
 These options specify the default number of points to probe in each dimension during [`G29`](/docs/gcode/G029.html).
 
 ```cpp
-  //#define MIN_PROBE_EDGE_LEFT MIN_PROBE_EDGE
-  //#define MIN_PROBE_EDGE_RIGHT MIN_PROBE_EDGE
-  //#define MIN_PROBE_EDGE_FRONT MIN_PROBE_EDGE
-  //#define MIN_PROBE_EDGE_BACK MIN_PROBE_EDGE
+  //#define PROBING_MARGIN_LEFT PROBING_MARGIN
+  //#define PROBING_MARGIN_RIGHT PROBING_MARGIN
+  //#define PROBING_MARGIN_FRONT PROBING_MARGIN
+  //#define PROBING_MARGIN_BACK PROBING_MARGIN
 ```
 These settings specify the boundaries for probing with [`G29`](/docs/gcode/G029-mbl.html). This will most likely be a sub-section of the bed because probes are not usually able to reach every point that the nozzle can. Take account of the probe's XY offsets when setting these boundaries.
 
@@ -1838,7 +1838,7 @@ Option|Description
 `LCM1602`|Generic LCM1602 LCD adapter
 `LCD_I2C_PANELOLU2`|PANELOLU2 LCD with status LEDs, separate encoder and click inputs. The click input can either be directly connected to a pin (if `BTN_ENC` is defined) or read through I2C (with `BTN_ENC` undefined). Requires [LiquidTWI2 library](//github.com/lincomatic/LiquidTWI2) v1.2.3 or later.
 `LCD_I2C_VIKI`|Panucatt VIKI LCD with status LEDs, integrated click & L/R/U/D buttons, separate encoder inputs.
-`SAV_3DLCD`|Shift register panels. [2 wire Non-latching LCD SR](//goo.gl/aJJ4sH). See [LCD configuration](//reprap.org/wiki/SAV_3D_LCD).
+`SAV_3DLCD`|Shift register panels. [2 wire Non-latching LCD SR](//github.com/fmalpartida/New-LiquidCrystal). See [LCD configuration](//reprap.org/wiki/SAV_3D_LCD).
 
 ### I2C Graphical LCDs
 
@@ -2097,7 +2097,7 @@ Marlin 2.0 allows for custom temperature sensors.
 #endif
 ```
 
-Enables the use of Hephestos 2 24V heated bed. 
+Enables the use of Hephestos 2 24V heated bed.
 
 ### Heated Chamber
 ```cpp
@@ -2323,7 +2323,7 @@ This option can be defined to set the minimum and maximum PWM speeds (1-255) req
 ```
 
 The default frequency for `FAST_PWM_FAN` is F = F_CPU/(2*255*1). See `configuration_adv.h` for further information.
- 
+
 ### Extruder Auto-Cooling Fans
 ```cpp
 #define E0_AUTO_FAN_PIN -1
@@ -2447,9 +2447,9 @@ Requires enabling the corresponding stepper driver ie `X2_DRIVER_TYPE` in `confi
 #if ENABLED(DUAL_X_CARRIAGE)
   #define X1_MIN_POS X_MIN_POS
   #define X1_MAX_POS X_BED_SIZE
-  #define X2_MIN_POS    80 
+  #define X2_MIN_POS    80
   #define X2_MAX_POS   353
-  #define X2_HOME_DIR    1 
+  #define X2_HOME_DIR    1
   #define X2_HOME_POS X2_MAX_POS
   #define DEFAULT_DUAL_X_CARRIAGE_MODE DXC_AUTO_PARK_MODE
   #define DEFAULT_DUPLICATION_X_OFFSET 100
@@ -2464,7 +2464,7 @@ With Dual X-Carriage the `HOTEND_OFFSET_X` setting for `T1` overrides `X2_HOME_P
 **In your slicer, be sure to set the second extruder X-offset to 0.**
 
 Dual X-Carriage has three different movement modes, set with [`M605`](/docs/gcode/M605.html) `S[mode]`:
- 
+
 - Mode 0: Full Control Mode. ([`M605`](/docs/gcode/M605.html) `S1`) Slicers that fully support dual x-carriages can use this mode for optimal travel results.
 - Mode 1: Auto-park Mode. ([`M605`](/docs/gcode/M605.html) `S1`) The firmware automatically parks/unparks the carriages on tool-change. No slicer support is required. ([`M605`](/docs/gcode/M605.html) `S1`)
 - Mode 2: Duplication Mode. (`[`M605`](/docs/gcode/M605.html) S2 X[offs] R[temp]`) The firmware will transparently make the second x-carriage and extruder copy all actions of the first x-carriage. This allows the printer to print 2 arbitrary items at once. (The 2nd extruder's X and temp offsets are set using: `[`M605`](/docs/gcode/M605.html) S2 X[offs] R[offs]`.)
@@ -2563,7 +2563,7 @@ Disable stepper motors after set time. Set to 0 to deactive feature. Time can be
 
 ### Default Minimum Feedrates
 ```cpp
-#define DEFAULT_MINIMUMFEEDRATE       0.0 
+#define DEFAULT_MINIMUMFEEDRATE       0.0
 #define DEFAULT_MINTRAVELFEEDRATE     0.0
 ```
 
@@ -2680,7 +2680,7 @@ If you have a board with pins named `X_MS1`, `X_MS2`, etc., then you can change 
 
 //#define DIGIPOT_I2C
 #if ENABLED(DIGIPOT_I2C) && !defined(DIGIPOT_I2C_ADDRESS_A)
-  #define DIGIPOT_I2C_ADDRESS_A 0x2C 
+  #define DIGIPOT_I2C_ADDRESS_A 0x2C
   #define DIGIPOT_I2C_ADDRESS_B 0x2D
 #endif
 
@@ -2825,11 +2825,11 @@ See `configuration_adv.h` for more details.
 ```cpp
 //#define SDCARD_SORT_ALPHA
   #if ENABLED(SDCARD_SORT_ALPHA)
-    #define SDSORT_LIMIT       40 
-    #define FOLDER_SORTING     -1 
+    #define SDSORT_LIMIT       40
+    #define FOLDER_SORTING     -1
     #define SDSORT_GCODE       false
     #define SDSORT_USES_RAM    false
-    #define SDSORT_USES_STACK  false 
+    #define SDSORT_USES_STACK  false
     #define SDSORT_CACHE_NAMES false
     #define SDSORT_DYNAMIC_RAM false
     #define SDSORT_CACHE_VFATS 2#endif
@@ -2965,7 +2965,7 @@ Some of these options may result in the display lagging behind controller events
   #define DGUS_RX_BUFFER_SIZE 128
   #define DGUS_TX_BUFFER_SIZE 48
   //#define DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS
-  #define DGUS_UPDATE_INTERVAL_MS  500 
+  #define DGUS_UPDATE_INTERVAL_MS  500
   #if EITHER(DGUS_LCD_UI_FYSETC, DGUS_LCD_UI_HIPRECY)
     #define DGUS_PRINT_FILENAME
     #define DGUS_PREHEAT_UI
@@ -3093,7 +3093,7 @@ If you have a watchdog reboot in an ATmega2560 the device can hang forever, as a
   #define BABYSTEP_MULTIPLICATOR_XY 1
   //#define DOUBLECLICK_FOR_Z_BABYSTEPPING  // Double-click on the Status Screen for Z Babystepping.
   #if ENABLED(DOUBLECLICK_FOR_Z_BABYSTEPPING)
-    #define DOUBLECLICK_MAX_INTERVAL 1250 
+    #define DOUBLECLICK_MAX_INTERVAL 1250
     //#define BABYSTEP_ALWAYS_AVAILABLE
     //#define MOVE_Z_WHEN_IDLE
     #if ENABLED(MOVE_Z_WHEN_IDLE)
@@ -3139,10 +3139,10 @@ These options specify the three points that will be probed during [`G29`](/docs/
 ### Custom Mininum Probe Edge
 ```cpp
 #if PROBE_SELECTED && !IS_KINEMATIC
-  //#define MIN_PROBE_EDGE_LEFT MIN_PROBE_EDGE
-  //#define MIN_PROBE_EDGE_RIGHT MIN_PROBE_EDGE
-  //#define MIN_PROBE_EDGE_FRONT MIN_PROBE_EDGE
-  //#define MIN_PROBE_EDGE_BACK MIN_PROBE_EDGE
+  //#define PROBING_MARGIN_LEFT PROBING_MARGIN
+  //#define PROBING_MARGIN_RIGHT PROBING_MARGIN
+  //#define PROBING_MARGIN_FRONT PROBING_MARGIN
+  //#define PROBING_MARGIN_BACK PROBING_MARGIN
 #endif
 ```
 See `configuration_adv.h` for more details.
@@ -3188,7 +3188,7 @@ Probe measurements are adjusted to compensate for temperature distortion. Use [`
 ```cpp
 //#define SAVED_POSITIONS 1         // Each saved position slot costs 12 bytes
 ```
-Enables [`G60`](/docs/gcode/G060.html) & [`G60`](/docs/gcode/G060.html) and specifies number of available slots.
+Enables [`G60`](/docs/gcode/G060.html) & [`G61`](/docs/gcode/G061.html) and specifies number of available slots.
 
 ### G2/G3 Arc Support
 ```cpp
@@ -3317,7 +3317,7 @@ Printrun may have trouble receiving long strings all at once. This option insert
 ```cpp
 //#define EXTRA_FAN_SPEED
 ```
-Add a secondary fan speed for each print-cooling fan. [`M106`](/docs/gcode/M106.html) 
+Add a secondary fan speed for each print-cooling fan. [`M106`](/docs/gcode/M106.html)
 - `M106 P[fan] T3-255` sets a secondary speed for [fan].
 - `M106 P[fan] T2` uses the set secondary speed.
 - `M106 P[fan] T1` restores the previous fan speed

@@ -165,3 +165,15 @@
 - version: 2.0.7
   hash: e8177735a00d1d7bb20b439544d3324fe01cfe7e
   date: 28/09/2020
+
+- version: 2.0.7.1
+  hash: 11662bf2b65e0762e7ed7c95522a15477215c013
+  date: 10/10/2020
+
+- version: 2.0.7.2
+  hash: 88a2ac92d5792de3de005b3b97d7bb561946c148
+  date: 15/10/2020
+
+- version: 2.0.8
+  hash: d92decb77479822945e3a01b4a83ad377a004301
+  date: 30/04/2021

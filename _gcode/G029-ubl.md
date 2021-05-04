@@ -1,9 +1,10 @@
 ---
 tag: g029m3
 title: Bed Leveling (Unified)
+author: Thinkyhead
+contrib: Vertabreak, shitcreek
 brief: Probe the bed and enable leveling compensation.
 
-experimental: true
 requires: AUTO_BED_LEVELING_UBL
 group: calibration
 
@@ -13,7 +14,7 @@ codes: [ G29 ]
 notes: |
   - Requires `AUTO_BED_LEVELING_UBL`.
   - [`G28`](/docs/gcode/G028.html) disables bed leveling. Follow with `G29 A` to turn leveling on, or use `RESTORE_LEVELING_AFTER_G28` to automatically keep leveling on after [`G28`](/docs/gcode/G028.html).
-  - `M420 S1` can be used to turn leveling on, but requires a valid (complete) mesh. See [M420](/docs/gcode/M420.html) for more details
+  - `M420 S1` can be used to turn leveling on, but requires a valid (complete) mesh. See [M420](/docs/gcode/M420.html) for more details.
 
   ### Release Notes:
 
@@ -29,8 +30,8 @@ notes: |
 
   - UBL gathers the points closest the nozzle unless you specify an (X,Y) coordinate pair.
 
-  - Use `G29 P3` to automatically fill in unpopulated mesh points. You can also use an LCD controller with `G29 P2` to move the nozzle to each unpopulated point and manually adjust the height. See the ‘P2’ and ‘P3’ parameters for usage info.
- 
+  - Use `G29 P3` to automatically fill in unpopulated mesh points. You can also use an LCD controller with `G29 P2` to move the nozzle to each unpopulated point and manually adjust the height. See the `P2` and `P3` parameters for usage info.
+
   - We know it takes a lot of effort to create good working Mesh data, so UBL stores its mesh data in a separate location where it won't be affected by EEPROM errors or version changes.
 
 parameters:
@@ -194,7 +195,7 @@ parameters:
           - `P4` moves to the closest Mesh Point (and/or the given `X` `Y`), raises the nozzle above the mesh height by the given `H` offset (or default Z_CLEARANCE_BETWEEN_PROBES), and waits while the controller is used to adjust the nozzle height. On click the displayed height is saved in the mesh.
           - Start Phase 4 at a specific location with `X` and `Y`. Adjust a specific number of Mesh Points with the `R` (Repeat) parameter. (If `R` is left out, the whole matrix is assumed.) This command can be terminated early (e.g., after editing the area of interest) by pressing and holding the encoder button.
           - The general form is `G29 P4 [R points] [X position] [Y position]`.
-          - The `H[offset]`` parameter is useful if a shim is used to fine-tune the mesh. For a 0.4mm shim the command would be `G29 P4 H0.4`. The nozzle is moved to the shim height, you adjust height to the shim, and on click the height minus the shim thickness is saved in the mesh.
+          - The `H[offset]` parameter is useful if a shim is used to fine-tune the mesh. For a 0.4mm shim the command would be `G29 P4 H0.4`. The nozzle is moved to the shim height, you adjust height to the shim, and on click the height minus the shim thickness is saved in the mesh.
           - _USE WITH CAUTION, as a bad mesh can cause the nozzle to crash into the bed!_
       -
         tag: 5
@@ -281,7 +282,7 @@ parameters:
     tag: W
     optional: true
     description: |
-      **_What?_**: Display valuable UBL data.
+      **_What?_**: Display valuable UBL data. (Requires `UBL_DEVEL_DEBUGGING`)
     values:
       -
         type: bool
@@ -306,42 +307,51 @@ parameters:
 
 examples:
   -
-    pre: This is a minimal 'quick-start' sequence for set-up and initial probing of a UBL mesh on a machine that includes a display and z-probe
+    pre: This is a minimal sequence for set-up and initial probing of a UBL mesh on a machine that includes a display and z-probe
     code: |
-      M502          ; Reset settings to configuration defaults...
-      M500          ; ...and Save to EEPROM. Use this on a new install.
-      M501          ; Read back in the saved EEPROM.
-
-      M190 S65      ; Not required, but having the printer at temperature helps accuracy
-      M104 S210     ; Not required, but having the printer at temperature helps accuracy
-
       G28           ; Home XYZ.
       G29 P1        ; Do automated probing of the bed.
-      G29 P2 B T    ; Manual probing of locations. USUALLY NOT NEEDED!
-      G29 P3 T      ; Repeat until all mesh points are filled in.
-
-      G29 T         ; View the Z compensation values.
-      G29 S1        ; Save UBL mesh points to EEPROM.
+      G29 P3        ; Smart Fill Repeat until all mesh points are filled in, Used to fill unreachable points.
+      G29 S0        ; Save UBL mesh points to slot 0 (EEPROM).
       G29 F 10.0    ; Set Fade Height for correction at 10.0 mm.
       G29 A         ; Activate the UBL System.
       M500          ; Save current setup. WARNING - UBL will be active at power up, before any G28.
+  -   
+    pre: This is a minimal sequence for set-up and initial probing of a UBL mesh on a machine that includes a display and no z-probe
+    code: |
+      G28           ; Home XYZ.
+      G29 P4 R255   ; Do manual probing of the bed.
+      G29 S0        ; Save UBL mesh points to slot 0 (EEPROM).
+      G29 F 10.0    ; Set Fade Height for correction at 10.0 mm.
+      G29 A         ; Activate the UBL System.
+      M500          ; Save current setup. WARNING - UBL will be active at power up, before any G28.   
+  -
+   pre: Optional settings
+   code: |
+     M502          ; Load configuration defaults. 
+     M500          ; Save configuration to EEPROM. M502 followed by M500 is suggested post flash to wipe the eeprom of invalid old settings.
+
+     M190 S65      ; Heat Bed to 65C. Not required, but having the printer at temperature may help accuracy.
+     M104 S210     ; Heat Hotend to 210C. Not required, but having the printer at temperature may help accuracy.
+
+     G29 T         ; View the Z compensation values.
+     G29 P2 B T    ; Manually probe unreachable points. Requires an LCD controller.
   -
     pre: Use [`G26`](/docs/gcode/G026.html) and [`G29`](/docs/gcode/G029.html) commands to fine-tune a measured mesh
     code: |
-      G26 C P T3.0  ; Produce mesh validation pattern with primed nozzle.
+      G26 C P T3.0  ; Produce mesh validation pattern with primed nozzle. G26 is optional; any bed leveling stl would also work.
           ; NOTE - PLA temperatures are assumed unless you specify - e.g. - B 105 H 225 for ABS Plastic
       G29 P4 T      ; Move nozzle to 'bad' areas and fine tune the values if needed.
           ; Repeat G26 and G29 P4 T  commands as needed.
-      G29 S1        ; Save UBL mesh values to EEPROM.
+      G29 S0        ; Save UBL mesh values to EEPROM.
       M500          ; Resave UBL's state information.
   -
-    pre: Use 3-point probe to 'tilt' a stored mesh; e.g. in your startup script
+    pre:  Tilt a stored mesh; e.g. in your startup script
     code: |
-      G29 L1        ; Load the mesh stored in slot 1 (from G29 S1)
-      G29 J         ; No size specified on the J option tells G29 to probe the specified 3 points and tilt the mesh according to what it finds.
-
+      G29 L0        ; Load the mesh stored in slot 0 (from G29 S0)
+      G29 J         ; Probe 3 points and tilt the mesh according to what it finds, optionally G29 J2 would do 4 points.
 ---
 
 The Unified Bed Leveling System (UBL) provides a comprehensive set of resources to produce the best bed leveling results possible.
 
-See the full [Unified Bed Leveling](/docs/features/unified_bed_leveling.html) documentation for more details. (Examples below.)
+See the full [Unified Bed Leveling](/docs/features/unified_bed_leveling.html) documentation for more details. Additional information are in the comment sections of `ubl_G29.cpp`.
