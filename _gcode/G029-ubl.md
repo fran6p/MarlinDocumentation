@@ -14,7 +14,7 @@ codes: [ G29 ]
 notes: |
   - Requires `AUTO_BED_LEVELING_UBL`.
   - [`G28`](/docs/gcode/G028.html) disables bed leveling. Follow with `G29 A` to turn leveling on, or use `RESTORE_LEVELING_AFTER_G28` to automatically keep leveling on after [`G28`](/docs/gcode/G028.html).
-  - `M420 S1` can be used to turn leveling on, but requires a valid (complete) mesh. See [M420](/docs/gcode/M420.html) for more details.
+  - `M420 S1` can be used to turn leveling on, but requires a valid (complete) mesh. See [`M420`](/docs/gcode/M420.html) for more details.
 
   ### Release Notes:
 
@@ -43,19 +43,20 @@ parameters:
       Unified Bed Leveling (i.e., `M420 S1`)
     values:
       -
-        type: bool
+        type: flag
   -
     tag: B
     optional: true
     description: |
       **Business Card** mode (`P2` only)
-      - Use the 'Business Card' mode of the Manual Probe subsystem with `P2`.
+      - Use the 'Business Card' mode of the Manual Probe subsystem with `P2`. A value may be given, or else it will be measured.
       - In this mode of `G29 P2`, use a shim that the nozzle can grab onto as it is lowered.
         In principle, the nozzle-bed distance is the same when the same resistance is felt in the shim. You can omit the numerical value on first invocation of `G29 P2 B` to measure shim thickness. Subsequent use of `B` will apply the previously-measured thickness by default.
       - Note: A non-compressible Spark Gap feeler gauge is recommended over a business card.
     values:
       -
-        type: bool
+        tag: mm/flag
+        type: float
   -
     tag: C
     optional: true
@@ -75,14 +76,14 @@ parameters:
     description: Disable Unified Bed Leveling (i.e., `M420 S0`).
     values:
       -
-        type: bool
+        type: flag
   -
     tag: E
     optional: true
     description: Stow probe after probing `E`ach point (`P1` only).
     values:
       -
-        type: bool
+        type: flag
   -
     tag: F
     optional: true
@@ -262,7 +263,7 @@ parameters:
       - Only used with `G29 P1 T U`. This speeds up the probing of the edge of the bed. This option is useful when the entire bed doesn't need to be probed because it will be physically adjusted (tramming).
     values:
       -
-        type: bool
+        type: flag
   -
     tag: V
     optional: true
@@ -285,7 +286,7 @@ parameters:
       **_What?_**: Display valuable UBL data. (Requires `UBL_DEVEL_DEBUGGING`)
     values:
       -
-        type: bool
+        type: flag
   -
     tag: X
     optional: true
@@ -316,7 +317,7 @@ examples:
       G29 F 10.0    ; Set Fade Height for correction at 10.0 mm.
       G29 A         ; Activate the UBL System.
       M500          ; Save current setup. WARNING - UBL will be active at power up, before any G28.
-  -   
+  -
     pre: This is a minimal sequence for set-up and initial probing of a UBL mesh on a machine that includes a display and no z-probe
     code: |
       G28           ; Home XYZ.
@@ -324,11 +325,11 @@ examples:
       G29 S0        ; Save UBL mesh points to slot 0 (EEPROM).
       G29 F 10.0    ; Set Fade Height for correction at 10.0 mm.
       G29 A         ; Activate the UBL System.
-      M500          ; Save current setup. WARNING - UBL will be active at power up, before any G28.   
+      M500          ; Save current setup. WARNING - UBL will be active at power up, before any G28.
   -
    pre: Optional settings
    code: |
-     M502          ; Load configuration defaults. 
+     M502          ; Load configuration defaults.
      M500          ; Save configuration to EEPROM. M502 followed by M500 is suggested post flash to wipe the eeprom of invalid old settings.
 
      M190 S65      ; Heat Bed to 65C. Not required, but having the printer at temperature may help accuracy.
@@ -337,7 +338,7 @@ examples:
      G29 T         ; View the Z compensation values.
      G29 P2 B T    ; Manually probe unreachable points. Requires an LCD controller.
   -
-    pre: Use [`G26`](/docs/gcode/G026.html) and [`G29`](/docs/gcode/G029.html) commands to fine-tune a measured mesh
+    pre: Use [`G26`](/docs/gcode/G026.html) and `G29` commands to fine-tune a measured mesh
     code: |
       G26 C P T3.0  ; Produce mesh validation pattern with primed nozzle. G26 is optional; any bed leveling stl would also work.
           ; NOTE - PLA temperatures are assumed unless you specify - e.g. - B 105 H 225 for ABS Plastic
@@ -352,6 +353,4 @@ examples:
       G29 J         ; Probe 3 points and tilt the mesh according to what it finds, optionally G29 J2 would do 4 points.
 ---
 
-The Unified Bed Leveling System (UBL) provides a comprehensive set of resources to produce the best bed leveling results possible.
-
-See the full [Unified Bed Leveling](/docs/features/unified_bed_leveling.html) documentation for more details. Additional information are in the comment sections of `ubl_G29.cpp`.
+The Unified Bed Leveling System (UBL) provides a comprehensive set of resources to produce the best bed leveling results possible. See the full [Unified Bed Leveling](/docs/features/unified_bed_leveling.html) documentation for more details.

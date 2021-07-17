@@ -214,28 +214,37 @@ div.container.gcode {
     margin-left: 16px;
     h3 { margin-left: -16px; }
     h4, h5, h6 { background: #200; color: white; margin-left: -0.5em; padding-left: 0.5em; }
-    h5 { background: #CCC; color: #000; }
-    h5 code { background: #AAA; color: #FF9; }
-    p, ul>li { font-size: 110% }
   }
   div.col-lg-12.row.examples .post {
     margin: -0.25em 0 1em;
     p { font-size: 85%; }
   }
+  div.row.related {
+    margin: 0.5em 16px 0;
+    padding: 5px 0 6px 1em;
+    border-radius: 6px;
+    background: #DDD; color: #000;
+    code { background: #E8E8E8; color: #000; }
+  }
 
   div.col-lg-12.row.meta { margin-left: 0; }
   div.row.examples pre { background: #E9F5FF; }
-  div.row.gallery p { font-size: normal; color: #601; }
+  div.row.gallery p { font-size: normal; }
   img { max-width: 100%; }
 
-  .row.usage>code {
-    background: transparent;
-    >span {
-      background: #FFFDBF;
-      white-space: nowrap;
+  .row.usage>div {
+    >code {
+      background: transparent;
+      >span {
+        padding: 0 1px;
+        white-space: nowrap;
+        background: #E0FDE0; &:hover { background: #C0FDC0; }
+        &.optional { background: #FFFDBF; &:hover { background: #FFFD90; } }
+      }
     }
-    >span:hover {
-      background: #FFFD90;
+    +div {
+      margin-top: 1px;
+      border-top: 1px #000 dotted;
     }
   }
 }
@@ -548,7 +557,7 @@ footer>.container { display: block; clear: both; margin: 1em auto; }
 @media (max-width: $screen-sm-min) {
   li#searchbox input[type="search"] { width: 10em !important; }
   .tocify.gcode, .custom-fixed-sidebar .tocify { width: 324px; }
-  footer>.container { width: ($screen-sm-min - 30 - 20); padding-left: 344px; }
+  footer>.container { width: 100%; padding-left: 0; }
 }
 
 // Fix headings in panels
@@ -562,11 +571,7 @@ div.panel.panel-info, div.panel.panel-warning {
 /*
 
 
-
-
                            DARK THEME
-
-
 
 
 */
@@ -606,14 +611,14 @@ body.night {
   .custom-tagline {
     background-color: #111;
     h1 { color: #DDF; }
-    }
+  }
   #tagline { color: cadetblue; }
   #marlin-carousel, .custom-tile { color: #EEE; background-color: #111; }
   .custom-tile-image-wrapper { border-color: white; }
   .custom-tile-image-legend {
     color: white;
     background-color: rgba(3,3,3,0.5);
-    }
+  }
   .custom-tile-image-block:hover>div { background-color: rgba(3,3,3,0.8); }
   .custom-article {
     table { border-top-color: #888; }
@@ -622,8 +627,8 @@ body.night {
       background-color: #DDD;
       border-bottom-color: #888;
       color: #000;
-      }
     }
+  }
   .post { background-color: #556; }
   [data-search-results]>h1 { color: #FFF; background: #BBB; }
   h1.gcode { background: #B88; }
@@ -670,7 +675,7 @@ body.night {
     background: #333;
     code, pre, .table>thead>tr>th { background-color: #E0E0F0; }
     .post { background-color: #EAEAFC; }
-    }
+  }
   #lcd_menu-page .col-lg-9 {
     th { background-color: #DDD; }
     td {
@@ -680,9 +685,9 @@ body.night {
       a { color: #C2F5FF; }
       code { background-color: #3669FF; color: #E2D5FB; }
       strong { color: #72D5FB; }
-      }
-      td+td code { background-color: #F9F2F4; color: #C7254E; }
     }
+    td+td code { background-color: #F9F2F4; color: #C7254E; }
+  }
   #bitmap-converter {
     label:hover { color: #9D9; }
     #preview-lg { border-color: gray; }
@@ -692,14 +697,14 @@ body.night {
       border-color: #666;
       background: #444;
       color: #2D2;
-      }
+    }
     div.file-selector {
       background: #226;
       .options { background-color: #8888; }
       label.tbd, label.tbd:hover { color: #FDD !important; }
-      }
-    div#err-box { color: red; }
     }
+    div#err-box { color: red; }
+  }
   .label-requires code { color: yellow; }
   .nav>li>a:hover, .nav>li>a:focus { background-color: #334; color: #AA0; }
   .container.gcode div.tocify.gcode { border-bottom-color: #EEE; }
@@ -707,17 +712,19 @@ body.night {
   div.container.gcode {
     div.col-lg-12.row {
       h4, h5, h6 { background: black; color: #FFF; }
-      h5 {
-        background: #222;
-        code { background: #444; color: #FFC; }
-      }
     }
-    .row.usage>code {
-      >span { color: #ADF; background: #246; }
-      >span:hover { background: #358; }
+    div.row.related {
+      background: #000; color: #666;
+      code { background: #000; color: #666; }
+    }
+    .row.usage>div {
+      >code>span {
+        color: #AFA; background: #262; &:hover { color: #0F0; background: #585; }
+        &.optional { color: #FFC; background: #442; &:hover { color: #FFA; background: #664; } }
+      }
+      +div { border-color: #888; }
     }
     div.row.examples pre { background: #000; }
-    div.row.gallery p { color: #904; }
   }
 
   .nav-list > li > a strong { color: #09B; }
@@ -732,11 +739,11 @@ body.night {
     td+td { border-left-color: #101; }
     strong em { color: #FE4; }
     h2 { background: transparent; }
-    }
+  }
   li#searchbox input[type="search"] {
     border-color: #666;
     color: #A00;
-    }
+  }
   iframe.youtube { border-color: #444; }
   #search.container {
     color: #FFF;
@@ -744,27 +751,25 @@ body.night {
     a { color: #C80; }
     input[type="search"] { border-color: #FC0; background: #000; color: #FCA; }
     input[type="submit"] { background: #425FB3; border-color: #FFF8; }
-    .overlay {
-      background: linear-gradient(0deg, #000, #142, #000);
-      }
+    .overlay { background: linear-gradient(0deg, #000, #142, #000); }
     [data-search-results]>.item:hover a { color: #FF0; }
-    }
+  }
   .table-striped>tbody>tr:nth-of-type(odd) { background: #333; }
   .list-group-item {
     background-color: #000;
     border-color: #222;
-    }
+  }
   a.list-group-item, button.list-group-item { color: #CCC; }
   .highlighter-rouge code { color: #C99; background-color: #000; }
   .navbar-default .navbar-nav>li>a { color: #77BFFF; }
   .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus {
     background-color: #3A633F;
     color: #ACF;
-    }
+  }
   .dropdown-menu {
     background-color: #255;
     color: #A4AAFD;
-    }
+  }
   .dropdown-menu>li>a { color: #A4AAFD; }
   .dropdown-menu>li>a:hover, .dropdown-menu>li>a:active { color: #C6DBFB; background-color: #3A633F; }
 
