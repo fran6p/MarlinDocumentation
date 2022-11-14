@@ -33,6 +33,21 @@ Try doubling `BLOCK_BUFFER_SIZE` to see if the problem goes away.
 ### No LCD / SD on ReARM?
 As seen in this [Chris's Basement video](//youtu.be/H-c8UTg-EMU), the RRD display doesn't always work on first install. It didn't even light up. A custom adapter is needed with the ReARM. See [this issue](//github.com/MarlinFirmware/Marlin/pull/7390#issuecomment-320371735), and [this issue](//github.com/MarlinFirmware/Marlin/issues/11927#issuecomment-441435170), and [this page](//github.com/wolfmanjm/universal-panel-adapter).
 
+### G29 Probing Failed!
+Marlin uses the `Z_PROBE_LOW_POINT` value to prevent the probe from pressing too hard against the bed and getting damaged. A value of -2 works well for a flat and level bed, but if the bed isn't trammed yet, the probe may exceed the low point and trigger a "Probing Failed" error. To prevent this from happening, change the setting to something like -10 during initial setup, and then you can change it back after the bed is perfectly trammed.
+
+### Heating Failed!
+Thermal Runaway is a constant concern with heaters, so Marlin watches heaters for some common runaway conditions:
+
+- Thermistor shorted or broken (MINTEMP/MAXTEMP).
+- Heating Failed: Temperature is rising too slowly (while below target).
+- Thermal Runaway: Temperature is too far from target range for too long (after settling).
+  NOTE: Thermal Runaway can be caused by a fan blowing too close to the hotend.
+
+During a first-time setup or firmware upgrade, we recommend leaving Thermal Protection enabled but relaxing the settings. To do this, set `WATCH_TEMP_PERIOD` and `WATCH_BED_TEMP_PERIOD` to longer intervals, such as 40 or 60 seconds. You can increase the `HYSTERESIS` settings to makes thermal protection more tolerant of an untuned PID. You should run `M303` on the hotend and bed as soon as possible, and it will help to loosen up thermal protection until all the PID is well tuned.
+
+Depending on your setup, you may get more stable heating using `MPCTEMP` instead of `PIDTEMP`.
+
 ### FTDI USB Bandwidth
 At 115K baud use 167 latency, 192 USB block request. As one goes up the other goes down.
 
