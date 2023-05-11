@@ -16,9 +16,9 @@ MathJax = { tex: { tags: 'all' } };
 
 ## Background
 
-Temperature is commonly controlled with a PID algorithm. The basic premise of PID is that the further the temperature is from the set-point, the more power is applied. If you could supply PID with perfect temperature information, it could, in principle, apply perfect control. However real life temperature information comes from sensors which exhibit both latency and noise.
+Temperature in control-systems (like Marlin) is commonly controlled with a PID algorithm. PID operates as a feedback loop with Proportional-Integral-Derivative control terms. Functionally the further the Measured-temperature is from the target temperature (setpoint), the more correction is applied to the power output. If you could supply PID with perfectly-measured temperature information, in a predictable steady state it should apply perfect control. However, temperature sensors have both latency and noise. PID control may also struggle to respond to rapid changes. In practice this leads to temperature overshoot and oscillation.
 
-Model predictive control takes a different approach to PID. Instead of trying to control against the sensor output, it maintains a simulation of the system and uses the simulated hotend temperature to plan an optimal power output. The simulation has no noise and no latency, making near perfect control possible. To prevent the simulated system state diverging from the real life hotend state, the simulated temperature is continually gently dragged towards the temperature measure from the sensor. This does introduce a little noise and latency into the simulated system but the effect is far smaller than for PID.
+Model Predictive Control (MPC) takes a different approach. Instead of trying to control against the measured temperature, it maintains a simulation of the system and uses the simulated hotend temperature to plan an optimal power output. The simulation has no noise and no latency, allowing for nearly perfect control. Thus it can compensate directly for extrusion speed and part-cooling. To prevent the simulated system state diverging from the actual hotend state, the simulated temperature is continually adjusted towards the sensor measurement. Although this does introduce a little noise and latency into the simulated system, the effect is far smaller than for PID.
 
 Configure with [`M306`](/docs/gcode/M306.html).
 
@@ -58,17 +58,17 @@ MPC_AMBIENT_XFER_COEFF_FAN255 0.0998
 
 If `M306 T` doesn't work –e.g., with positive temperature coefficient (PTC) hotends– MPC can be configured manually.
 
-1. Start with the part cooling fan off and hotend cold. Record the starting temperature Ts. e.g., Ts = 20°C.
+1. Start with the part cooling fan off and hotend cold. Record the ambient starting temperature Ta. e.g., Ta = 20°C.
 1. Set the temperature to 200°C and then back to 0°C once it reaches around 200°C. Measure the curve of temperature
 vs time while the hotend is heating, starting at time = 0s.
 1. Measure the fastest rate Rf at which temperature increases in °C/s. e.g., Rf = 3°C/s.
 1. Divide the heater power by Rf to get `MPC_BLOCK_HEAT_CAPACITY` in J/K. e.g., 40W / 3°C/s = 13.33 J/K.
 1. Measure the temperature Tf and time tf of the point where temperature was increasing fastest.
-1. `MPC_SENSOR_RESPONSIVENESS` is Rf / (Rf x tf + Ts - Tf). e.g., for tf = 10s and Tf = 35°C, this is 3°C/s / ( 3°C/s x 10s + 20°C - 35°C) = 0.2 K/s/K.
+1. `MPC_SENSOR_RESPONSIVENESS` is Rf / (Rf x tf + Ta - Tf). e.g., for tf = 10s and Tf = 35°C, this is 3°C/s / ( 3°C/s x 10s + 20°C - 35°C) = 0.2 K/s/K.
 1. Set these values with `M306` and set the temperature to 200°C.
 1. MPC should eventually settle at a stable temperature around 200°C.
 1. Use `M105` to find the PWM output required to maintain 200°C. e.g., if `M105` returns `T:200.12 /200.00 B:18.38 /0.00 P:18.24 /0.00 @:41 B@:0` it is the value `41` after the first `@` so PWM = 41.
-1. `MPC_AMBIENT_XFER_COEFF` is PWM / 127 * heater power / (200°C - Ts). e.g., 41 / 127 * 40 W / (200°C - 20°C) = 0.072 W/K.
+1. `MPC_AMBIENT_XFER_COEFF` is PWM / 127 * heater power / (200°C - Ta). e.g., 41 / 127 * 40 W / (200°C - 20°C) = 0.072 W/K.
 1. Find `MPC_AMBIENT_XFER_COEFF_FAN255` by repeating the last three steps with the fan on full.
 
 ## Advanced Configuration

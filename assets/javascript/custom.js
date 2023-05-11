@@ -86,7 +86,7 @@ $(function() {
    */
   $toc = $("#toc");
   if ($toc !== undefined) $toc.tocify({
-    selectors: (typeof toc_selectors != 'undefined') ? toc_selectors : 'h1,h2,h3',
+    selectors: (typeof toc_selectors != 'undefined') ? toc_selectors : 'h1,h2,h3,h4',
     scrollTo: 65,
     extendPage: false,
     hashGenerator: 'pretty',
@@ -115,7 +115,7 @@ $(function() {
   });
 
   // Expand first item of tocify (table of content) by default
-  $('.tocify-subheader').first().css('display','block');
+  $('#toc .tocify-subheader').first().css('display','block');
 
   // Responsive submenu - shifts to left on smaller window
   // Bootstrap's pull-left is right and vice versa
@@ -165,7 +165,7 @@ $(function() {
     setCookie('nightMode', dark);
   });
 
-  var $here_ul = $('.container.gcode ul.nav.nav-list');
+  var $here_ul = $('.container.detail ul.nav.nav-list');
   if ($here_ul.length) {
     var $here_link = $here_ul.children('li.tocify-item.active');
     $.fn.visibleHeight = function() {
