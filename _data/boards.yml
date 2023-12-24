@@ -496,8 +496,8 @@
     brief: "BigTreeTech SKR Mini E3 V3.0 (STM32G0B0RE / STM32G0B1RE)"
   - name: BTT_MANTA_E3_EZ_V1_0
     brief: "BigTreeTech Manta E3 EZ V1.0 (STM32G0B1RE)"
-  - name: BTT_MANTA_M4P_V1_0
-    brief: "BigTreeTech Manta M4P V1.0 (STM32G0B0RE)"
+  - name: BTT_MANTA_M4P_V2_1
+    brief: "BigTreeTech Manta M4P V2.1 (STM32G0B0RE)"
   - name: BTT_MANTA_M5P_V1_0
     brief: "BigTreeTech Manta M5P V1.0 (STM32G0B1RE)"
   - name: BTT_MANTA_M8P_V1_0
@@ -643,11 +643,13 @@
   - name: PANDA_PI_V29
     brief: "Panda Pi V2.9 - Standalone (STM32F103RC)"
   - name: SOVOL_V131
-    brief: "Sovol V1.3.1 (GD32F103RET6)"
+    brief: "Sovol V1.3.1 (GD32F103RE)"
   - name: TRIGORILLA_V006
     brief: "Trigorilla V0.0.6 (GD32F103RE)"
   - name: KEDI_CONTROLLER_V1_2
     brief: "EDUTRONICS Kedi Controller V1.2 (STM32F103RC)"
+  - name: MD_D301
+    brief: "Mingda D2 DZ301 V1.0 (STM32F103ZE)"
 
 - group: "ARM Cortex-M4F"
   long:
@@ -758,6 +760,8 @@
     brief: "I3DBEEZ9 V1 (STM32F407ZG)"
   - name: MELLOW_FLY_E3_V2
     brief: "Mellow Fly E3 V2 (STM32F407VG)"
+  - name: FYSETC_CHEETAH_V30
+    brief: "FYSETC Cheetah V3.0 (STM32F446RC)"
 
 - group: "ARM Cortex-M7"
   long:
